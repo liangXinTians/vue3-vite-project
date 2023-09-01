@@ -196,6 +196,11 @@ const postVerification = () => {
 
 
 
+
+
+
+
+
 .input::placeholder {
   font-size: smaller;
 }
