@@ -194,10 +194,7 @@ const postVerification = () => {
   z-index: 100;
 }
 
-.input {
-  // border: none;
-  // border-bottom: 1px solid black;
-}
+
 
 .input::placeholder {
   font-size: smaller;
