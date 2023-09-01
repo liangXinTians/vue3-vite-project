@@ -214,6 +214,9 @@ const postVerification = () => {
     left: 30%;
   }
 
+
+
+  
   .out-mima {
     position: fixed;
     right: 15%;
