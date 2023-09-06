@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@jyeontu/jvuewheel": "^0.6.3",
     "@kangc/v-md-editor": "^2.3.17",
     "axios": "^1.5.0",
@@ -17,6 +18,13 @@
     "less": "^4.2.0",
     "less-loader": "^11.1.3",
     "mitt": "^3.0.1",
+=======
+    "axios": "^1.5.0",
+    "echarts": "^5.0.0",
+    "element-plus": "^2.3.12",
+    "less": "^4.2.0",
+    "less-loader": "^11.1.3",
+>>>>>>> 92a55ab88cc3ce9d4c437b68989abde073697752
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"
   },

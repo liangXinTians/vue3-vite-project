@@ -2,11 +2,9 @@ import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
 import router from './router/index'
-
-
-const app = createApp(App)
-app.use(router)
-app.mount('#app')
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 
 import VueMarkdownEditor from '@kangc/v-md-editor'
@@ -30,7 +28,14 @@ VMdPreview.use(githubTheme, {
 VueMarkdownEditor.use(vuepressTheme, {
   Prism,
 })
+
+const app = createApp(App)
 //注册
 app.use(VMdPreview)
 app.use(VueMarkdownEditor)
-
+app.use(ElementPlus)
+app.use(router)
+app.mount('#app')
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}
