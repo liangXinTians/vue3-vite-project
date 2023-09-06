@@ -11,7 +11,7 @@
       <template #title>头像</template>
       <el-menu-item index="5-1" @click="getInfo">个人信息</el-menu-item>
       <el-menu-item index="5-2" @click="router.push({ name: 'writeArticle' })">写文章</el-menu-item>
-      <el-menu-item index="5-3" @click="router.replace({ name: 'myArticle' })">文章管理</el-menu-item>
+      <el-menu-item index="5-3" @click="router.push({ name: 'myArticle' })">文章管理</el-menu-item>
     </el-sub-menu>
   </el-menu>
 
@@ -152,6 +152,7 @@ const postVerification = () => {
 
 .color {
   background-color: transparent !important;
+  // background-color: transparent;
   color: rgb(255, 255, 255);
 }
 
