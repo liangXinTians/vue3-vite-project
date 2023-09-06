@@ -1,27 +1,36 @@
+import administratorHome from "../views/administrator/administratorHome.vue"
+import chartMain from "../views/administrator/chartMain.vue"
+import manageMain from '../views/administrator/manageMain.vue'
+import stationMain from "../views/administrator/stationMain.vue"
 const routes = [
   {
-    path: '/',
-    redirect: '/aHome'
-  },
-  {
-    path: '/dashbord',
-    name: 'dashbord',
+    path:'/',
+    name:"administratorHome",
     title: '',
-    component: () => import('../views/dashbord.vue'),
-    children: [
+    component:administratorHome,
+    children:[
       {
-        path: '/aHome',
-        name: 'aHome',
-        title: '',
-        component: () => import('../views/aHome.vue'),
+        path:'chartMain',
+        name:'chartMain',
+        component:chartMain
       },
       {
-        path: '/aHeader',
-        name: 'aHeader',
-        title: '',
-        component: () => import('../views/aHeader.vue'),
-      }
+        path:'manageMain',
+        name:'manageMain',
+        component:manageMain
+      },
+      {
+        path:'stationMain',
+        name:'stationMain',
+        component:stationMain
+      },
     ]
-  }
+  },
+  // {
+  //   path:'/manageMain',
+  //   name:"manageMian",
+  //   title: '',
+  //   component:manageMain
+  // }
 ]
 export default routes
