@@ -1,6 +1,7 @@
 <template>
-  <div>
-    111
+  <div class="all">
+    111aaa
+    <div class="content">11</div>
   </div>
 </template>
 
@@ -9,4 +10,14 @@
 
 </script>
 
-<style lang='less' scoped></style>
+<style lang='less' scoped>
+.all {
+  width: 100%;
+
+  .content {
+    width: 1000px;
+    margin: 0 auto;
+    background-color: aqua;
+  }
+}
+</style>

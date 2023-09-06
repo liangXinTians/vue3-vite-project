@@ -1,0 +1,21 @@
+
+
+// articles 获取所有文章
+// S_articles 搜索文章
+// add 写文章的时候添加文章
+// del 在自己的文章里面删除文章
+// upDataArt 在自己的文章里面更新自己的文章
+// my 自己的文章 获取自己的文章
+
+
+"code": 200,
+  "msg": "添加成功",
+    "date": {
+  "uuid": 章节id,
+    "user_id": 0,
+      "name": "章节标题",
+        "info": "章节内容",
+          "tag": "标签",
+            "time": 0, 时间
+              "like_sum": 访问量
+
