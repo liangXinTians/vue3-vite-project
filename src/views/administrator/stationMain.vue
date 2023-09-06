@@ -13,7 +13,7 @@
       style="position: relative; top: 1px"
       >刷新岗位</el-button
     >
-  <cardStation :listValue="listValue" @detailsClick="detailsClick" @editClick="editClick"></cardStation>
+  <cardStation :listValue="listValue" @detailsClick="detailsClick" @editClick="editClick" @deleteClick="deleteClick"></cardStation>
   <!-- 添加岗位 -->
   <el-dialog v-model="disAddStation" title="添加岗位" width="30%" draggable>
       <el-form
@@ -80,7 +80,7 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="disAddFirm = false">取消</el-button>
+          <el-button @click="disEditStation = false">取消</el-button>
           <el-button type="primary" @click="putEditStationValue(editStationList)">
             提交
           </el-button>
@@ -178,7 +178,7 @@ const detailsClick=(item,index)=>{
 }
 const disEditStation=ref(false)
 //存放所要修改的数据
-const editStationList=({
+const editStationList=reactive({
     cid:'',
     title:'',
     category:'',
@@ -198,6 +198,22 @@ const editClick=(item)=>{
 //提交编辑信息
 const putEditStationValue=(editStationList)=>{
     console.log(editStationList)
+    //将参数传给接口
+    //重新加载页面
+    //将数据清空
+}
+//删除功能
+const deleteClick=(item)=>{
+    //根据id进行删除
+    ElMessageBox.confirm("刷新岗位, 是否继续?", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then((result) => {
+    //接口，根据传过来的id进行删除，删除成功之后刷新页面
+  }).catch((err) => {
+    
+  });
 }
 </script>
 

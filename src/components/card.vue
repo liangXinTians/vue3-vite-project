@@ -10,6 +10,7 @@
         <el-card
           :style="'background:' + cardColor[index % cardColor.length]"
           class="classCard"
+          
         >
           <div style="height: 100px; position: relative">
             <el-row class="title">
@@ -18,11 +19,12 @@
                   class="images"
                   src="https://cdn.staticaly.com/gh/442908218/imageBlog@main/imgs/zhizhu.jpg"
                   alt=""
+                  @click="cardClick(item)"
                 />
               </el-col>
               <!-- 公司名称 -->
               <el-col :span="19" style="margin-left: 120px">
-                <div class="textOutIgnore" @click="cardClick(item)">
+                <div class="textOutIgnore" @click="cardClick(item)" style="padding-bottom: 20px;">
                   {{ item.title }}
                 </div>
               </el-col>
