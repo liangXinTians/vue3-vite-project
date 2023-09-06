@@ -1,6 +1,6 @@
 <template>
   <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" :ellipsis="false" @select="handleSelect">
-    <el-menu-item index="0" class="color">校园招聘</el-menu-item>
+    <div class="color top-title">校园招聘</div>
     <div class="flex-grow" />
     <el-menu-item index="1" class="color" @click="router.push({ name: 'aHome' })">首页</el-menu-item>
     <el-menu-item index="2" class="color" @click="router.push({ name: 'articles' })">文章</el-menu-item>
@@ -154,6 +154,11 @@ const postVerification = () => {
   background-color: transparent !important;
   // background-color: transparent;
   color: rgb(255, 255, 255);
+}
+
+.top-title {
+  font-size: 20px;
+  padding-top: 15px;
 }
 
 .no-title-dialog .el-dialog__header {
