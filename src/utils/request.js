@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import axios from 'axios'
 // import { getToken } from './auth'; 获取token
 
@@ -22,15 +21,3 @@ instance.interceptors.request.use(
 )
 
 export default instance
-=======
-import axios from 'axios'
-
-//创建axios实例
-const request = axios.create({
-  baseURL: '',
-  timeout: 5000,
-  headers: {
-    'Content-type': 'application/json;charset=utf-8',
-  },
-})
->>>>>>> 92a55ab88cc3ce9d4c437b68989abde073697752
