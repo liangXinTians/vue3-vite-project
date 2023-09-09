@@ -1,23 +1,29 @@
 <template>
   <div class="all">
-    111aaa
-    <div class="content">11</div>
+    <button @click="ceshi" class="aa">测试接口</button>
   </div>
 </template>
 
 <script setup>
+import { login, mailvef, mailregister, info } from "../api/login"
 
+const ceshi = () => {
+  info().then((res) => {
+    console.log(res)
+  })
+}
 
 </script>
 
 <style lang='less' scoped>
 .all {
   width: 100%;
+  height: 100vh;
 
-  .content {
-    width: 1000px;
-    margin: 0 auto;
-    background-color: aqua;
+  .aa {
+    position: fixed;
+    top: 200px;
+    left: 200px;
   }
 }
 </style>

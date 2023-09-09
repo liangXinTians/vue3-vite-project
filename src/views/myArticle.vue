@@ -41,8 +41,8 @@
                 <div class="content-left">
                   <div class="like_sum bottom">1.4k</div>
                   <div class="time bottom">2023-9-3</div>
-                  <div class="content-good bottom" @click.stop="likeit()">删除</div>
-                  <div class="content-good bottom" @click.stop="updatainfo">修改</div>
+                  <div class="content-good bottom" @click.stop="deleteArticle()">删除</div>
+                  <div class="content-good bottom" @click.stop="updatainfo()">修改</div>
                 </div>
                 <div class="tag">
                   tag
@@ -61,6 +61,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import UpdataArticle from './updataArticle.vue'
 
 const router = useRouter()
 
@@ -77,23 +78,15 @@ const artsRequest = ref({//获取文章的内容
 
 
 
-//搜索
-// const searchArticle = (searchinput) => {
-//   articles.value = null
-//   搜索({name: searchinput}).then((res)=>{
-//     articles.value = res.data
-//   })
-// }
-
 // 初始化获取个人文章数据
 const loadMore = () => {
-  aaaa().then((res) => {
-    articles = res.data
-  })
+  // aaaa().then((res) => {
+  //   articles = res.data
+  // })
 }
 
 // //进入文章
-const getname = (articleName) => {
+const getId = (articleName) => {
   // let form = { classId: articleName }
   // gotoArticle(form).then((res) => {
   //   if (res.data.flag) {
@@ -103,6 +96,7 @@ const getname = (articleName) => {
   //   }
   // })
   router.push({ name: 'article' })
+  console.log("进入文章")
 }
 
 //删除文章
@@ -110,6 +104,15 @@ const deleteArticle = (art_id) => {
   aaa({ art_id: art_id }).then((res) => {
     loadMore()
   })
+}
+
+//修改文章
+const updatainfo = () => {
+  // 传递id  .....
+
+  // 进入修改页面
+  router.push({ name: 'updataArticle' })
+  console.log("进入修改页面")
 }
 
 

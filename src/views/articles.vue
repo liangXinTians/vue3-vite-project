@@ -27,16 +27,16 @@
             </div>
           </div>
         </div> -->
-        <div class="article-content" ref="container" @scroll="handleScroll">
-          <div class="box-card" ref="container" @scroll="handleScroll">
+        <div class="article-content">
+          <div class="box-card">
             <div class="class-card" @click="getId(uuid)">
               <div class="content-name">three.js 打造游戏小场景（拾取武器、领取任务、刷怪）</div>
               <div class="content-info">创建一个平面元素为底板模型，找一个合适的图片作为底板的贴图，上面的代码用的是一个正方形作为基础贴图，方便之后查看，每1个单位含有一个正方形，如下：</div>
               <div class="content-bottom">
                 <div class="content-left">
-                  <div class="like_sum bottom">1.4k</div>
-                  <div class="time bottom">2023-9-3</div>
-                  <div class="content-good bottom" @click.stop="likeit()">点赞</div>
+                  <div class="like_sum bottom"><i class="iconfont icon-kanguos"></i>1.4k</div>
+                  <div class="time bottom"><i class="iconfont icon-riqi"></i>2023-9-3</div>
+                  <div class="content-good bottom" @click.stop="likeit()"><i class="iconfont icon-good"></i></div>
                 </div>
                 <div class="tag">
                   tag
@@ -52,32 +52,31 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import bus from '../utils/bus'
 
 const router = useRouter()
 
-const containerRef = ref(null)
-const loading = ref(false)
+const state = reactive({
+  items: [], // 页面内容列表
+  windowHeight: 0, // 窗口高度
+  scrollHeight: 0, // 页面内容的总高度
+  scrollTop: 0, // 滚动条的垂直偏移量
+})
+
 const uuid = ref(1)//测试传递的id
 const searchinput = ref('')
-const artsRequest = ref({//获取文章的内容
+const artsRequest = reactive({//获取文章的内容
   next_id: 0,//文章个数
   page_size: 5,//每次加载的个数
 }
 )
 const articles = ref()//返回的文章数据
-const sum = ref(1) //是否点赞
+const sum = ref(0) //是否点赞
 
-//响应加载更多
-const handleScroll = () => {
-  const container = containerRef.value
-  if (container.scrollTop + container.clientHeight >= container.scrollHeight) {
-    loadMore()
-    console.log('到底了')
-  }
-}
+
+
 
 //搜索
 const searchArticle = (searchinput) => {
@@ -94,15 +93,17 @@ const loadMore = () => {
     next_id: artsRequest.next_id,
     page_size: 5,
   }
+  artsRequest.next_id += 5
+  let aaa = artsRequest.next_id
+  // console.log(aaa)
   // jiekou(form).then((res) => {
   //   articles = res.data
   // })
   if (sum.value === 1) {
-    // document.getElementByClassName("content-good").style.color = "rgb(30, 128, 255)"
-    console.log("获取不到class")
+    document.querySelector(".content-good").style.color = "rgb(30, 128, 255)"
   }
   else {
-    // document.getElementByClassName("content-good").style.color = "rgb(255, 255, 255)"
+    document.querySelector(".content-good").style.color = "rgb(30, 30, 30)"
   }
 }
 
@@ -116,28 +117,54 @@ const getId = (articleId) => {
 
 //点赞
 const likeit = (id) => {
-  let form = {
-    sum: sum,
-    art_id: id
-  }
-  jiekou(form).then((res) => {
-    loadMore()
-  })
+  // let form = {
+  //   sum: sum,
+  //   art_id: id
+  // }
+  // jiekou(form).then((res) => {
+  //   loadMore()
+  // })
   if (sum.value === 1) {
-    sum.value === -1
+    sum.value = 0
   }
   else {
-    sum.value === 1
+    sum.value = 1
+  }
+  loadMore()
+}
+
+// 监听滚动事件，更新滚动相关的状态
+const handleScroll = () => {
+  state.scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+  // console.log(state.scrollTop)
+  if (state.scrollTop + state.windowHeight >= state.scrollHeight) {
+    // console.log("到底了")
   }
 }
 
+// setInterval(() => {
+//   state.scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+//   if (state.scrollTop + state.windowHeight >= state.scrollHeight) {
+//     console.log("到底了")
+//   }
+// }, 1000)
+
+
+
+// 初始化页面高度相关的状态
+const initializePageHeight = () => {
+  state.windowHeight = window.innerHeight
+  state.scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
+  // console.log(state.windowHeight, state.scrollHeight)
+}
 
 onMounted(() => {
   // 初始化加载数据
   loadMore()
+  //监听方法
+  window.addEventListener('scroll', handleScroll)
+  initializePageHeight()
 })
-
-
 </script>
 
 <style lang='less' scoped>
@@ -186,10 +213,10 @@ onMounted(() => {
 
       .article-content {
         width: 100%;
+        height: 2000px;
 
         .box-card {
           width: 100%;
-
 
           &:hover {
             background-color: rgb(247, 248, 250);

@@ -60,16 +60,17 @@ const getDate = () => {
 
 //发布
 const pullArticle = () => {
-  getDate()
-  let form = {
-    name: name,
-    info: text,
-    tag: tag,
-    time: date,
-  }
-  jiekou(form).then((res) => {
-    ElMessage.success("添加成功")
-  })
+  console.log(text.value)
+  // getDate()
+  // let form = {
+  //   name: name,
+  //   info: text,
+  //   tag: tag,
+  //   time: date,
+  // }
+  // jiekou(form).then((res) => {
+  //   ElMessage.success("添加成功")
+  // })
 }
 
 

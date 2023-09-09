@@ -17,8 +17,8 @@
       <!-- 数据栏 -->
       <div class="data-bottom">
         <span class="user.name bottom">梁田</span>
-        <span class="data-time bottom">2023-9-3</span>
-        <span class="like-sum bottom">1455</span>
+        <span class="data-time bottom"><i class="icon-riqi iconfont"></i>2023-9-3</span>
+        <span class="like-sum bottom"><i class="iconfont icon-kanguos"></i>1455</span>
       </div>
       <!-- 内容 -->
       <div class="data-info">

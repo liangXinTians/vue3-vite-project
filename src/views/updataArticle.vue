@@ -16,7 +16,6 @@
       </el-col>
     </el-row>
     <div class="content">
-      <!-- <v-md-editor v-model="text" height="400px"></v-md-editor> -->
       <v-md-editor v-model="data.text" :autofocus="true" height="85vh" width="100%" class="editor" ref="editor"
         :left-toolbar="leftBar" :right-toolbar="rightBar" :disabled-menus="[]"
         @upload-image="handleUploadImage"></v-md-editor>
@@ -35,7 +34,6 @@ const name = ref('')
 const tag = ref('')
 const date = ref('')
 const user = ref()
-const data = ref()
 
 //左侧工具栏
 const leftBar = ref('undo redo clear h bold italic strikethrough quote ul ol table hr link image code')
@@ -49,6 +47,7 @@ onMounted(() => {
   createGetArticle()
 })
 
+
 //个人数据
 const createGetInfo = () => {
   jiekou().then((res) => {
@@ -58,7 +57,7 @@ const createGetInfo = () => {
 
 //文章数据
 const createGetArticle = () => {
-  jiekou().then((res) => {
+  jiekou({ uuid: id }).then((res) => {
     data.value = res
   })
 }
@@ -83,10 +82,6 @@ const pullArticle = () => {
     ElMessage.success("添加成功")
   })
 }
-
-
-
-
 </script>
 
 <style lang='less' scoped>

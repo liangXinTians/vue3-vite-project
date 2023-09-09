@@ -19,7 +19,7 @@
 
 
   <div class="login" v-show="infoVisible">
-    <div @click="goOut" class="go-out">差号</div>
+    <div @click="goOut" class="go-out"><i class="iconfont icon-chahao"></i></div>
     <img src="../assets/img/login.png" alt="">
     <!-- 登录 -->
     <el-form :model="form" class="form" v-show="change">
@@ -40,17 +40,17 @@
     </el-form>
 
     <!-- 注册 -->
-    <el-form :model="form" class="form" v-show="!change">
+    <el-form :model="forms" class="form" v-show="!change">
       <el-form-item label="邮箱 :">
-        <el-input v-model="form.email" placeholder="请填写正确邮箱" type="email" data-validate="请填写正确邮箱" />
+        <el-input v-model="forms.email" placeholder="请填写正确邮箱" type="email" data-validate="请填写正确邮箱" />
       </el-form-item>
       <el-form-item label="填写密码 :">
-        <el-input v-model="form.desc" placeholder="请输入密码" type="password" name="password" minlength="6"
+        <el-input v-model="forms.desc" placeholder="请输入密码" type="password" name="password" minlength="6"
           data-validate="密码最少六位数" required />
       </el-form-item>
       <div class="code">
         <div class="code-input">
-          <el-input v-model="form.verification" placeholder="请输入验证码" class="input-code" />
+          <el-input v-model="forms.verification" placeholder="请输入验证码" class="input-code" />
         </div>
         <div class="code-btn">
           <el-button class="btn-code" @click="postVerification">发送验证码</el-button>
@@ -69,9 +69,9 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-// import { infoLogin } from "../api/login"
+import { login, mailvef, mailregister, info } from "../api/login"
 
 const router = useRouter()
 const infoVisible = ref(false)//登录弹出框
@@ -87,14 +87,29 @@ const forms = reactive({//注册数据
   desc: '',
   verification: ''
 })
+const token = ref()//登录的token
+const user = ref()//个人数据
 
+onMounted(() => {
+
+})
+
+//获取个人数据
 const getInfo = () => {
   infoVisible.value = true
+}
+
+const getInfos = () => {
+  info().then((res) => {
+    user.value = res.data
+  })
 }
 
 const goOut = () => {
   infoVisible.value = false
 }
+
+
 
 const createInfoLogin = () => {
   let forms = {}
@@ -104,56 +119,96 @@ const createInfoLogin = () => {
 
 //登录
 const getContent = () => {
-  接口(form).then((res) => {
-    if (res.code === 1) {
+  let forms = {
+    account: form.name,
+    password: form.desc
+  }
+  login(forms).then((res) => {
+    if (res.data.code === 1) {
       router.push({ name: aaa })
+      infoVisible.value = false
+      ElMessage({
+        showClose: true,
+        message: '登陆成功',
+        type: 'success',
+      })
     }
     else {
-      router.push({ name: aHome })
+      router.push({ name: 'aHome' })
+      infoVisible.value = false
+      ElMessage({
+        showClose: true,
+        message: '登陆成功',
+        type: 'success',
+      })
+      getInfos()
     }
+    token.value = res.data.accessToken
+    localStorage.setItem('token', JSON.stringify(token))//存储token
   })
 }
+
 
 //注册
 const postContnt = () => {
   change.value = true
+  let formss = {
+    Account: forms.email,
+    code: forms.verification,
+    password: forms.desc,
+  }
+  mailregister(formss).then(() => {
+    console.log("注册成功")
+  })
 }
 
 //发送验证码
 const postVerification = () => {
-  let data = { email: forms.email }
-  postVerification(data).then((res) => {
-    // if(){
+  let formsss = { account: forms.email }
+  mailvef(formsss).then((res) => {
 
-    // }
-    // else{
-    //   Element.
-    // }
+    console.log("发送验证码成功")
   })
 }
 
-
-// const bbbb = () => {
-//   change.value = true
-// }
+//控制主题
+const handleSelect = (index) => {
+  if (index === "3") {
+    const elements = document.querySelectorAll('.color')
+    elements.forEach(element => {
+      element.style.color = 'rgb(255,255,255)'
+    })
+  }
+  else if (index === "4") {
+    const elements = document.querySelectorAll('.color')
+    elements.forEach(element => {
+      element.style.color = 'rgb(255,255,255)'
+    })
+  }
+  else {
+    const elements = document.querySelectorAll('.color')
+    elements.forEach(element => {
+      element.style.color = 'rgb(19, 5, 5)'
+    })
+  }
+}
 
 </script>
 
 <style lang='less' scoped>
 .el-menu-demo {
-  // width: 100%;
   position: fixed;
   top: 0;
   left: 50px;
   right: 50px;
   background-color: rgba(0, 0, 0, 0);
-  z-index: 10000;
+  z-index: 10;
 }
 
 .color {
   background-color: transparent !important;
   // background-color: transparent;
-  color: rgb(255, 255, 255);
+  color: rgb(19, 5, 5);
 }
 
 .top-title {
@@ -220,6 +275,10 @@ const postVerification = () => {
   img {
     width: 100%;
     height: 150px;
+  }
+
+  .icon-chahao {
+    padding: 5px 5px 0 0;
   }
 }
 

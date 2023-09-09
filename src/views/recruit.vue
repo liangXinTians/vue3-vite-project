@@ -17,9 +17,9 @@
     <div class="content">
       <div class="content-tag">
         <div class="tag-title">筛选条件</div>
-        <el-collapse v-model="activeNames" @change="handleChange">
+        <el-collapse>
           <el-collapse-item title="实习类型" name="1">
-            <el-radio-group @change="handleRadioChange1">
+            <el-radio-group @change="handleRadioChange1" v-model="radio.radio1">
               <el-radio label="日常学习" size="large">日常学习</el-radio>
               <el-radio label="暑假学习" size="large">暑假学习</el-radio>
               <el-radio label="3" size="large">Option 3</el-radio>
@@ -27,14 +27,14 @@
             </el-radio-group>
           </el-collapse-item>
           <el-collapse-item title="职位类别" name="2">
-            <el-radio-group @change="handleRadioChange2">
+            <el-radio-group @change="handleRadioChange2" v-model="radio.radio2">
               <el-radio label="日常学习" size="large">日常学习</el-radio>
               <el-radio label="暑假学习" size="large">暑假学习</el-radio>
               <el-radio label="3" size="large">Option 3</el-radio>
             </el-radio-group>
           </el-collapse-item>
           <el-collapse-item title="工作地点" name="3">
-            <el-radio-group @change="handleRadioChange3">
+            <el-radio-group @change="handleRadioChange3" v-model="radio.radio3">
               <el-radio label="日常学习" size="large">日常学习</el-radio>
               <el-radio label="暑假学习" size="large">暑假学习</el-radio>
               <el-radio label="4" size="large">Option 4</el-radio>
@@ -52,7 +52,7 @@
             </div>
             <div class="page-right">
               <div class="look-job">查看职位</div>
-              <div class="job-icon">箭头</div>
+              <div class="job-icon"><i class="iconfont icon-jiantouyou"></i></div>
             </div>
           </div>
         </div>
@@ -70,8 +70,12 @@ import bus from '../utils/bus'
 const router = useRouter()
 const user = ref()
 const activeNames = ref(['1'])
-const radio1 = ref('1')
-const serchjob = reactive({ //初始化和搜索的参数
+const radio = reactive({//raido
+  radio1: 1,
+  radio2: 1,
+  radio3: 1,
+})
+const searchjob = reactive({ //初始化和搜索的参数
   name: "",
   title: "",
   job_category: "",
@@ -102,16 +106,16 @@ onMounted(() => {
 
 // 点击筛选条件
 const handleRadioChange1 = (value) => {
-  serchjob.job_category = value
+  searchjob.job_category = value
   // createGetJob()
 }
 
 const handleRadioChange2 = (value) => {
-  serchjob.job_type_name = value
+  searchjob.job_type_name = value
   // createGetJob()
 }
 const handleRadioChange3 = (value) => {
-  serchjob.job_location = value
+  searchjob.job_location = value
   // createGetJob()
 }
 

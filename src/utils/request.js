@@ -1,17 +1,20 @@
 import axios from 'axios'
-// import { getToken } from './auth'; 获取token
 
 //创建axios实例
 const instance = axios.create({
-  baseURL: '',
+  baseURL: 'http://10.10.1.51:8000',
   timeout: 5000,
+  headers: {
+    'Content-Type': 'application/json',//默认请求头
+  }
 })
 
 instance.interceptors.request.use(
   config => {
-    const token = getToken() // 获取token
+    const storedToken = localStorage.getItem('token')//获取token
+    const token = JSON.parse(storedToken) // 转换token
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}` // 将token添加到请求头中
+      config.headers.Authorization = `Bearer ${token._value}` // 将token添加到请求头中
     }
     return config
   },
