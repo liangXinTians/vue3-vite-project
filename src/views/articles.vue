@@ -2,44 +2,35 @@
   <div class="all">
     <div class="content">
       <div class="content-article">
+        <!-- 搜索 -->
         <div class="content-main">
           <div class="content-title">文章内容</div>
           <div class="content-search">
             <el-input v-model="searchinput" placeholder="请输入文章标题" class="input-with-select">
               <template #append>
-                <el-button @click="searchArticle(searchinput)">搜索</el-button>
+                <el-button @click="searchArticles()">搜索</el-button>
               </template>
             </el-input>
           </div>
         </div>
         <el-divider class="divider" />
-        <!-- <div class="article-content" ref="container" @scroll="handleScroll">
-          <div class="box-card" v-for="(item, index) in articles" :key="index" ref="container" @scroll="handleScroll">
-            <div class="classCard" @click="getname(item.uuid)">
-              
-                <div>{{ item.name }}</div>
-                <div>{{ item.info }}</div>
-                <div>
-                  <div>{{ item.like_sum }}</div>
-                  <div>{{ item.time }}</div>
-                </div>
-              
-            </div>
-          </div>
-        </div> -->
+        <!-- 文章列表 -->
         <div class="article-content">
-          <div class="box-card">
-            <div class="class-card" @click="getId(uuid)">
-              <div class="content-name">three.js 打造游戏小场景（拾取武器、领取任务、刷怪）</div>
-              <div class="content-info">创建一个平面元素为底板模型，找一个合适的图片作为底板的贴图，上面的代码用的是一个正方形作为基础贴图，方便之后查看，每1个单位含有一个正方形，如下：</div>
+          <div class="box-card" v-for="(item, index) in articles" :key="index">
+            <div class="class-card" @click="getId(item.uuid)">
+              <div class="content-name">{{ item.name }}</div>
+              <div class="content-info">{{ item.info }}</div>
               <div class="content-bottom">
                 <div class="content-left">
-                  <div class="like_sum bottom"><i class="iconfont icon-kanguos"></i>1.4k</div>
-                  <div class="time bottom"><i class="iconfont icon-riqi"></i>2023-9-3</div>
-                  <div class="content-good bottom" @click.stop="likeit()"><i class="iconfont icon-good"></i></div>
+                  <div class="like_sum bottom"><i class="iconfont icon-kanguos"></i>{{ item.like_sum * 130 }}</div>
+                  <div class="time bottom"><i class="iconfont icon-riqi"></i>{{ new Date(item.time).toLocaleDateString()
+                  }}
+                  </div>
+                  <div class="content-good bottom" @click.stop="likeit(item.uuid)"><i class="iconfont icon-good"></i>{{
+                    item.like_sum }}</div>
                 </div>
                 <div class="tag">
-                  tag
+                  {{ item.tag }}
                 </div>
               </div>
               <el-divider />
@@ -55,6 +46,7 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import bus from '../utils/bus'
+import { getArticle, goodArticle, searchArticle } from '../api/article.js'
 
 const router = useRouter()
 
@@ -69,42 +61,43 @@ const uuid = ref(1)//测试传递的id
 const searchinput = ref('')
 const artsRequest = reactive({//获取文章的内容
   next_id: 0,//文章个数
-  page_size: 5,//每次加载的个数
+  page_size: 0,//每次加载的个数
 }
 )
-const articles = ref()//返回的文章数据
+const articles = ref([])
 const sum = ref(0) //是否点赞
 
 
-
-
 //搜索
-const searchArticle = (searchinput) => {
-  articles.value = null
-  // 搜索({name: searchinput}).then((res)=>{
-  //   articles.value = res.data
-  // })
+const searchArticles = () => {
+  let form = {
+    name: searchinput.value
+  }
+  searchArticle(form).then((res) => {
+    console.log(res)
+    articles.value = res.data.date
+    console.log(res.data.date)
+  })
 }
 
 // 初始化
 const loadMore = () => {
-  // console.log(111)
+  artsRequest.page_size += 5
   let form = {
     next_id: artsRequest.next_id,
-    page_size: 5,
+    page_size: artsRequest.page_size,
   }
-  artsRequest.next_id += 5
-  let aaa = artsRequest.next_id
-  // console.log(aaa)
-  // jiekou(form).then((res) => {
-  //   articles = res.data
-  // })
-  if (sum.value === 1) {
-    document.querySelector(".content-good").style.color = "rgb(30, 128, 255)"
-  }
-  else {
-    document.querySelector(".content-good").style.color = "rgb(30, 30, 30)"
-  }
+
+  getArticle(form).then((res) => {
+    articles.value = res.data.date
+    console.log(res)
+  })
+  // if (sum.value = 1) {
+  //   document.querySelector(".content-good").style.color = "rgb(30, 128, 255)"
+  // }
+  // else {
+  //   document.querySelector(".content-good").style.color = "rgb(30, 30, 30)"
+  // }
 }
 
 // //进入文章
@@ -117,13 +110,14 @@ const getId = (articleId) => {
 
 //点赞
 const likeit = (id) => {
-  // let form = {
-  //   sum: sum,
-  //   art_id: id
-  // }
-  // jiekou(form).then((res) => {
-  //   loadMore()
-  // })
+  let form = {
+    sum: sum.value,
+    art_id: id
+  }
+  goodArticle(form).then((res) => {
+    loadMore()
+    console.log(res)
+  })
   if (sum.value === 1) {
     sum.value = 0
   }
@@ -139,6 +133,7 @@ const handleScroll = () => {
   // console.log(state.scrollTop)
   if (state.scrollTop + state.windowHeight >= state.scrollHeight) {
     // console.log("到底了")
+    // loadMore()
   }
 }
 
@@ -213,7 +208,6 @@ onMounted(() => {
 
       .article-content {
         width: 100%;
-        height: 2000px;
 
         .box-card {
           width: 100%;

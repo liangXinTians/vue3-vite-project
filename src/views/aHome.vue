@@ -6,10 +6,20 @@
 
 <script setup>
 import { login, mailvef, mailregister, info } from "../api/login"
+import { addArticle } from "../api/article"
 
 const ceshi = () => {
-  info().then((res) => {
-    console.log(res)
+  let form = {
+    name: "梁田",
+    info: "今年21",
+    tag: "大四",
+    time: "2023-9-11",
+  }
+  addArticle(form).then((res) => {
+    const storedToken = localStorage.getItem('token')//获取token
+    const token = JSON.parse(storedToken) // 转换token
+
+    console.log(token)
   })
 }
 

@@ -16,4 +16,13 @@ export default defineConfig({
     }),
     vue()
   ],
+  // proxy: {
+  //   '/api': {
+  //     target: 'http://127.0.0.1:5175',
+  //     changeOrigin: true,
+  //     pathRewrite: {
+  //       '^/api': ''
+  //     }
+  //   },
+  // },
 })

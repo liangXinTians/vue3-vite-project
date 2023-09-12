@@ -125,7 +125,7 @@ const getContent = () => {
   }
   login(forms).then((res) => {
     if (res.data.code === 1) {
-      router.push({ name: aaa })
+      router.push({ name: "" })
       infoVisible.value = false
       ElMessage({
         showClose: true,
@@ -137,13 +137,15 @@ const getContent = () => {
       router.push({ name: 'aHome' })
       infoVisible.value = false
       ElMessage({
-        showClose: true,
-        message: '登陆成功',
+        showClose: true, message: '登陆成功',
         type: 'success',
       })
+      form.name = ''
+      form.desc = ''
       getInfos()
     }
     token.value = res.data.accessToken
+    console.log(token.value)
     localStorage.setItem('token', JSON.stringify(token))//存储token
   })
 }
@@ -159,6 +161,9 @@ const postContnt = () => {
   }
   mailregister(formss).then(() => {
     console.log("注册成功")
+    forms.email = ''
+    forms.desc = ''
+    forms.verification = ''
   })
 }
 
@@ -166,7 +171,6 @@ const postContnt = () => {
 const postVerification = () => {
   let formsss = { account: forms.email }
   mailvef(formsss).then((res) => {
-
     console.log("发送验证码成功")
   })
 }

@@ -1,20 +1,11 @@
 <template>
   <div class="all">
     <div class="content">
-      <!-- 标题 -->
-      <!-- <div>{{ data.name }}</div> -->
-      <!-- 数据栏 -->
-      <!-- <div>
-        <span>{{ user.name }}</span>
-        <span>{{ data.time }}</span>
-        <span>{{ data.like_sum }}</span>
-      </div> -->
-      <!-- 内容 -->
-      <!-- <div>{{ data.info }}</div> -->
 
       <!-- 标题 -->
-      <div class="data-name">three.js 打造游戏小场景（拾取武器、领取任务、刷怪）</div>
+      <div class="data-name">{{ articles.name }}</div>
       <!-- 数据栏 -->
+      <!-- <div>{{ articles.name }}</div> -->
       <div class="data-bottom">
         <span class="user.name bottom">梁田</span>
         <span class="data-time bottom"><i class="icon-riqi iconfont"></i>2023-9-3</span>
@@ -36,12 +27,15 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import bus from '../utils/bus'
+import { articleDetail } from '../api/article'
 
 const user = ref()
 const datas = reactive({//文章Id
   articleId: null
 })
-const data = ref()//文章数据
+const articles = reactive({
+  name: ""
+})//文章数据
 const comments = ref()//评论数据
 
 
@@ -49,26 +43,28 @@ onMounted(() => {
   //文章Id
   // bus.on('event', (val) => { console.log(val) })
   bus.on('event', handle)
-  // 初始化加载数据
-  createGetArticle()
+  // createGetArticle()
   //获取个人信息
   createGetInfo()
   //获取评论数据
   createGetComments()
+  handle()
 })
 
 //文章数据
 const createGetArticle = () => {
-  // jiekou({ uuid: articleId }).then((res) => {
-  //   data.value = res.data
-  // })
+  articleDetail({ uuid: datas.articleId }).then((res) => {
+    articles.name = res.data.date.name
+    console.log(articles.name)
+  })
 }
 
 //传递的Id
 const handle = (val) => {
   // console.log(val)
-  // datas.articleId = val
-  // console.log(datas.articleId)
+  datas.articleId = val
+  console.log(datas.articleId)
+  createGetArticle()
 }
 
 //个人信息

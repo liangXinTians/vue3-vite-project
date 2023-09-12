@@ -16,7 +16,6 @@
       </el-col>
     </el-row>
     <div class="content">
-      <!-- <v-md-editor v-model="text" height="400px"></v-md-editor> -->
       <v-md-editor v-model="text" :autofocus="true" height="85vh" width="100%" class="editor" ref="editor"
         :left-toolbar="leftBar" :right-toolbar="rightBar" :disabled-menus="[]"
         @upload-image="handleUploadImage"></v-md-editor>
@@ -27,9 +26,10 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-const router = useRouter()
 import { ElMessage } from 'element-plus'
+import { addArticle } from '../api/article'
 
+const router = useRouter()
 const text = ref("文章内容")
 const name = ref('')
 const tag = ref('')
@@ -55,22 +55,28 @@ const createGetInfo = () => {
 //时间 
 const getDate = () => {
   date.value = Date.now()
-  console.log(date)
+  console.log(date.value)
 }
 
 //发布
 const pullArticle = () => {
-  console.log(text.value)
-  // getDate()
-  // let form = {
-  //   name: name,
-  //   info: text,
-  //   tag: tag,
-  //   time: date,
-  // }
-  // jiekou(form).then((res) => {
-  //   ElMessage.success("添加成功")
-  // })
+  console.log(text)
+  getDate()
+  let form = {
+    name: name.value,
+    info: text.value,
+    tag: tag.value,
+    time: date.value,
+  }
+  addArticle(form).then((res) => {
+    ElMessage.success("添加成功")
+    console.log(res)
+    ElMessage({
+      showClose: true,
+      message: '登陆成功',
+      type: 'success',
+    })
+  })
 }
 
 

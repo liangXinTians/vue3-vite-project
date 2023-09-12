@@ -8,8 +8,8 @@
     <div class="searchs">
       <div class="search bar7">
         <form>
-          <input type="text" placeholder="搜索职位" class="input">
-          <el-button type="primary" round class="submit" @click="submit">搜索</el-button>
+          <input type="text" placeholder="搜索职位" class="input" v-model="search.data">
+          <el-button type="primary" round class="submit" @click="createGetJob">搜索</el-button>
         </form>
       </div>
     </div>
@@ -18,26 +18,30 @@
       <div class="content-tag">
         <div class="tag-title">筛选条件</div>
         <el-collapse>
-          <el-collapse-item title="实习类型" name="1">
+          <el-collapse-item title="实习公司" name="1">
             <el-radio-group @change="handleRadioChange1" v-model="radio.radio1">
-              <el-radio label="日常学习" size="large">日常学习</el-radio>
-              <el-radio label="暑假学习" size="large">暑假学习</el-radio>
-              <el-radio label="3" size="large">Option 3</el-radio>
-              <el-radio label="4" size="large">Option 4</el-radio>
+              <el-radio label="抖音" size="large">抖音</el-radio>
+              <el-radio label="360" size="large">360</el-radio>
             </el-radio-group>
           </el-collapse-item>
           <el-collapse-item title="职位类别" name="2">
             <el-radio-group @change="handleRadioChange2" v-model="radio.radio2">
-              <el-radio label="日常学习" size="large">日常学习</el-radio>
-              <el-radio label="暑假学习" size="large">暑假学习</el-radio>
-              <el-radio label="3" size="large">Option 3</el-radio>
+              <el-radio label="产品类" size="large">产品类</el-radio>
+              <el-radio label="售前交付类" size="large">售前交付类</el-radio>
+              <el-radio label="大数据类" size="large">大数据类</el-radio>
+              <el-radio label="安全类" size="large">安全类</el-radio>
+              <el-radio label="测试运维类" size="large">测试运维类</el-radio>
+              <el-radio label="硬件类" size="large">硬件类</el-radio>
+              <el-radio label="算法类" size="large">算法类</el-radio>
+              <el-radio label="职能类 " size="large">职能类 </el-radio>
             </el-radio-group>
           </el-collapse-item>
           <el-collapse-item title="工作地点" name="3">
             <el-radio-group @change="handleRadioChange3" v-model="radio.radio3">
-              <el-radio label="日常学习" size="large">日常学习</el-radio>
-              <el-radio label="暑假学习" size="large">暑假学习</el-radio>
-              <el-radio label="4" size="large">Option 4</el-radio>
+              <el-radio label="北京市" size="large">北京市</el-radio>
+              <el-radio label="青岛市" size="large">青岛市</el-radio>
+              <el-radio label="深圳市" size="large">深圳市</el-radio>
+              <el-radio label="上海市" size="large">上海市</el-radio>
             </el-radio-group>
           </el-collapse-item>
         </el-collapse>
@@ -45,14 +49,18 @@
       <div class="content-pages">
         <div class="content-title">职位列表</div>
         <div class="content-page">
-          <div class="page" @click="goPage">
-            <div class="page-left">
-              <div class="left-title">标题</div>
-              <div class="page-tag">地点 职位 类型</div>
-            </div>
-            <div class="page-right">
-              <div class="look-job">查看职位</div>
-              <div class="job-icon"><i class="iconfont icon-jiantouyou"></i></div>
+          <div class="content-page" v-for="(item, index) in alljob" :key="index">
+            <div class="page" @click="goPage">
+              <div class="page-left">
+                <div class="left-title">{{ item.title }}</div>
+                <div class="page-tag"><span class="span">{{ item.job_location }} </span><span class="span">{{
+                  item.job_typeName }} </span><span class="span">{{
+    item.company }}</span></div>
+              </div>
+              <div class="page-right">
+                <div class="look-job">查看职位</div>
+                <div class="job-icon"><i class="iconfont icon-jiantouyou"></i></div>
+              </div>
             </div>
           </div>
         </div>
@@ -66,58 +74,62 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import bus from '../utils/bus'
+import { searchjob } from '../api/job'
 
 const router = useRouter()
 const user = ref()
 const activeNames = ref(['1'])
 const radio = reactive({//raido
-  radio1: 1,
-  radio2: 1,
-  radio3: 1,
+  radio1: '',
+  radio2: '',
+  radio3: '',
 })
-const searchjob = reactive({ //初始化和搜索的参数
-  name: "",
-  title: "",
-  job_category: "",
-  job_type_name: "",
-  job_location: "",
-  next_id: 0,//最后一个职位的id
-  page_size: 10
+const search = reactive({
+  data: ''
 })
-const datas = reactive({
-
-})
-
-
+const alljob = ref()
 
 
 
 onMounted(() => {
   // 初始化
-  // createGetJob()
+  createGetJob()
 })
 
-// const createGetJob = () => {
-//   jiekou(serchjob).then((res) => {
-//     datas = res.data
-//   })
-//   datas = null
-// }
+
+const createGetJob = () => {
+  console.log("开始调用接口", search.data)
+  let form = {
+    name: radio.radio1,
+    title: search.data,
+    job_category: "校园招聘",
+    job_type_name: radio.radio2,
+    job_location: radio.radio3,
+    next_id: -1,//最后一个职位的id
+    page_size: 10
+  }
+  searchjob(form).then((res) => {
+    alljob.value = res.data.date
+    console.log("接口调用成功", res)
+  })
+}
+
 
 // 点击筛选条件
 const handleRadioChange1 = (value) => {
-  searchjob.job_category = value
-  // createGetJob()
+  radio.radio1 = value
+  createGetJob()
 }
 
 const handleRadioChange2 = (value) => {
-  searchjob.job_type_name = value
-  // createGetJob()
+  radio.radio2 = value
+  createGetJob()
 }
 const handleRadioChange3 = (value) => {
-  searchjob.job_location = value
-  // createGetJob()
+  radio.radio3 = value
+  createGetJob()
 }
+
 
 
 //进入详情页 岗位信息
@@ -259,6 +271,10 @@ const goPage = (id) => {
               color: #999;
               font-size: 14px;
               margin-top: 5px;
+
+              .span {
+                padding-right: 10px;
+              }
             }
           }
 
